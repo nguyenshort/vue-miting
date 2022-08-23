@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "NODE_OPTIONS=--max-old-space-size=8192 && vite build",
     "preview": "vite preview",
-    "check:ts": "vue-tsc --noEmit && vite build",
+    "check:ts": "vite build",
     "build:env": "sed 's/=.*/=/' .env > .env.example",
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "apollo:codegen": "npx apollo codegen:generate --localSchemaFile=schema.graphql --target=typescript --tagName=gql --includes=./src/apollo/it/**/*.ts --globalTypesFile=src/apollo/__generated__/itTypes.ts",
