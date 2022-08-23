@@ -97,7 +97,10 @@ const scrollToBottom = () => {
 watch(rawMessage, () => {
   nextTick(() => {
     scrollToBottom()
-    !count.value && count.value++ && audio.play()
+    if(count.value > 0) {
+      audio.play()
+    }
+    count.value++
   })
 })
 

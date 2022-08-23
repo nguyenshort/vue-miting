@@ -21,7 +21,7 @@
       class='ml-3'
       @click='roomStore.toogleTab("settings")'
     >
-      <i-tabler-layout />
+      <i-akar-icons-settings-horizontal />
     </button>
 
 

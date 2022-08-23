@@ -96,7 +96,10 @@ watch(rawMessage, () => {
   nextTick(() => {
     if (listRef.value) {
       listRef.value.scrollTop = listRef.value.scrollHeight
-      !count.value && count.value++ && audio.play()
+      if(count.value > 0) {
+        audio.play()
+      }
+      count.value++
     }
   })
 })

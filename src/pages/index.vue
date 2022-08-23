@@ -7,8 +7,7 @@
     <div class='h-screen flex items-center justify-center md:justify-end relative'>
 
       <div class='absolute top-5 right-5'>
-        <a-avatar v-if='userStore.auth' :src='userStore.user?.avatar'></a-avatar>
-
+        <current-user-avatar v-if='userStore.auth' />
         <a-button v-else type='danger' @click='$emitter.emit("authModal")'>Đăng Nhập</a-button>
 
       </div>
@@ -88,11 +87,10 @@ onMounted(() => nextTick(() => {
   if(route.query.returnChanel) {
     autoRoom.value = route.query.returnChanel as string
     window.history.replaceState({}, '', '/')
+    authFunction(() => {
+      toRoom(roomID.value || autoRoom.value)
+    })
   }
-
-  authFunction(() => {
-    toRoom(roomID.value || autoRoom.value)
-  })
 }))
 
 watch(() => userStore.auth, (auth) => {

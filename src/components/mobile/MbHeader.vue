@@ -1,13 +1,12 @@
 <template>
-  <div class='flex px-3 h-[50px]'>
+  <div class='flex px-3 h-[50px] items-center'>
     <a href='/' @click.prevent='leaveRoom'>
       <img class='h-[45px] w-auto' src='/images/logo.png' alt='' />
     </a>
 
-    <button class='text-[16px] ml-auto'>
-      <i-akar-icons-settings-horizontal />
-    </button>
-
+    <div v-if='userStore.auth' class='ml-auto'>
+      <current-user-avatar />
+    </div>
   </div>
 </template>
 
@@ -15,6 +14,7 @@
 
 const router = useRouter()
 const agoraStore = useAgoraStore()
+const userStore = useUserStore()
 
 const leaveRoom = async () => {
   await agoraStore.leave()

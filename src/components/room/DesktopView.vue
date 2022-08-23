@@ -4,9 +4,9 @@
     <div class='mx-3 bg-white h-[70px]'>
       <div class='flex relative justify-center items-center h-full py-7 px-5'>
 
-        <router-link to='/' class='absolute top-1/2 left-0 -translate-y-1/2'>
+        <a href='/' class='absolute top-1/2 left-0 -translate-y-1/2' @click.prevent='leaveRoom'>
           <h1> <img src='/images/logo.png' alt='logo' class='w-[55px]' /></h1>
-        </router-link>
+        </a>
 
         <button class='flex items-center text-gray-500'>
           <i-mdi-compass-outline class='text-[18px]' />
@@ -113,6 +113,15 @@ const { height } = useWindowSize({ initialHeight: window.innerHeight })
 const contentHeight = computed(() => {
   return (height.value - 70 - 60 - 16 - 16 - 50) + 'px'
 })
+
+const router = useRouter()
+const agoraStore = useAgoraStore()
+
+const leaveRoom = async () => {
+  await agoraStore.leave()
+  message.success('Thoát phòng thành công')
+  await router.push('/')
+}
 </script>
 
 <style scoped>
