@@ -24,7 +24,10 @@ export default ({ mode }) => {
    */
   return defineConfig({
     build: {
-      sourcemap: true,
+      sourcemap: false,
+    },
+    optimizeDeps: {
+      disabled: false
     },
     plugins: [
       vue(),
