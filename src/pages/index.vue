@@ -9,7 +9,7 @@
       <div class='absolute top-5 right-5'>
         <a-avatar v-if='userStore.auth' :src='userStore.user?.avatar'></a-avatar>
 
-        <a-button v-else type='danger'>Đăng Nhập</a-button>
+        <a-button v-else type='danger' @click='$emitter.emit("authModal")'>Đăng Nhập</a-button>
 
       </div>
 
@@ -37,7 +37,7 @@
               <a-input
                 v-model:value='roomID'
                 placeholder='Hoặc nhập ID phòng'
-                @keyup.enter='toRoom(roomID.toString())'
+                @keyup.enter='authFunction(toRoom(roomID.toString()))'
               >
                 <template #prefix>
                   <i-material-symbols-video-chat-rounded />
@@ -57,11 +57,11 @@
 </template>
 <script lang='ts' setup>
 import { v4 as uuidv4 } from 'uuid'
-const userStore = useUserStore()
 
-const user = useUserStore()
+const userStore = useUserStore()
 const emitter = useEmitter()
 
+const autoRoom = ref('')
 const roomID = ref('')
 
 const toRoom = (id: string) => {
@@ -72,22 +72,34 @@ const toRoom = (id: string) => {
 }
 
 const authFunction = (cb: () => void | Promise<void>) => {
-  if(user.auth) {
-    cb()
+  if(userStore.auth) {
+    cb?.()
   } else {
     emitter.emit('authModal')
   }
 }
 
 const newRoom = () => {
-  toRoom(uuidv4())
+  toRoom(uuidv4().replace(/-/g, '').substring(0, 6))
 }
 
 const route = useRoute()
 onMounted(() => nextTick(() => {
   if(route.query.returnChanel) {
-    emitter.emit('confirmModal', route.query.returnChanel)
+    autoRoom.value = route.query.returnChanel as string
+    window.history.replaceState({}, '', '/')
   }
+
+  authFunction(() => {
+    toRoom(roomID.value || autoRoom.value)
+  })
 }))
+
+watch(() => userStore.auth, (auth) => {
+  if(auth) {
+    console.log("watch to room")
+    toRoom(roomID.value || autoRoom.value)
+  }
+})
 
 </script>

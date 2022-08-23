@@ -12,16 +12,22 @@ const props = defineProps<{
 const agoraStore = useAgoraStore()
 
 onMounted(() => {
-  props.user.audioTrack?.play()
+  if(agoraStore.primaryUser?.id !== props.user.id) {
+    props.user.audioTrack?.play()
+  }
 })
 watch(() => props.user, () => {
   nextTick(() => {
 
-    if(agoraStore.primaryUser.id !== props.user.id) {
+    if(agoraStore.primaryUser?.id !== props.user.id) {
       props.user.audioTrack?.play()
     }
 
   })
+})
+
+onUnmounted(() => {
+  props.user.audioTrack?.stop()
 })
 
 </script>

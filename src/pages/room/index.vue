@@ -24,6 +24,7 @@ const route = useRoute()
 const checkRouter = () => {
   // Vừa load => ko có user => chuyển về confirm
   if(Object.values(agoraStore.users).length === 0) {
+    sessionStorage.setItem('returnChanel', route.params.id as string)
     router.replace({
       name: 'index',
       query: {

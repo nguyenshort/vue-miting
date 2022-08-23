@@ -24,6 +24,7 @@
     "@vueuse/core": "^9.1.0",
     "@vueuse/firebase": "^9.1.0",
     "@vueuse/motion": "^2.0.0-beta.12",
+    "@vueuse/router": "^9.1.0",
     "agora-rtc-sdk-ng": "^4.13.0",
     "animejs": "^3.2.1",
     "ant-design-vue": "^3.2.11",

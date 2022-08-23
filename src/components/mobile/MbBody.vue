@@ -21,6 +21,11 @@
       </div>
 
     </div>
+
+    <div>
+      <audio-stream v-for='(item, index) in agoraStore.users' :key='index' :user='item' />
+    </div>
+
   </div>
 </template>
 

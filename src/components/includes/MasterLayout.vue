@@ -11,11 +11,21 @@ import { useLoadingIndicator } from '@nguyenshort/vue3-loading-indicator'
 const cookies = useCookies()
 const useUser = useUserStore()
 const router = useRouter()
+
 const route = useRoute()
 // Init app
 const vueClientInit = async  () => {
-  useUser.setToken(route.query._token || cookies?.get('_token'))
+
+  const params: any = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop: string) => searchParams.get(prop),
+  })
+  if(params._token) {
+    cookies?.set('_token', params._token)
+  }
+
+  useUser.setToken(cookies?.get('_token'))
   // kiểm tra cookie, lấy user
+
   if (useUser._token) {
     await useUser.getMe()
   }
@@ -24,20 +34,6 @@ const vueClientInit = async  () => {
     useUser.logout()
     cookies?.remove('_token')
   }
-
-  // check auth mỗi khi navigation
-  router.beforeEach((to, from, next) => {
-    if(to.path !== '/') {
-      if (to.meta.private && !useUser.auth) {
-        sessionStorage.setItem('returnTo', to.fullPath)
-        next('/')
-      } else {
-        next()
-      }
-    } else {
-      next()
-    }
-  })
 }
 
 await vueClientInit()
