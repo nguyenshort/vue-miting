@@ -97,10 +97,12 @@ const scrollToBottom = () => {
 watch(rawMessage, () => {
   nextTick(() => {
     scrollToBottom()
-    if(count.value > 0) {
-      audio.play()
+    if(roomStore.messageSound) {
+      if(count.value > 0) {
+        audio.play()
+      }
+      count.value++
     }
-    count.value++
   })
 })
 

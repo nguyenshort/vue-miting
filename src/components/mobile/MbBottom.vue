@@ -51,6 +51,7 @@
   </div>
   <mb-users-tab />
   <mb-chat-tab />
+  <mb-settings-tab />
 </template>
 
 <script lang='ts' setup>

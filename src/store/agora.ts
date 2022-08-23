@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { UserDocument } from '@entities/user'
-import type { IAgoraRTCClient, IAgoraRTCRemoteUser, ILocalTrack, UID } from 'agora-rtc-sdk-ng'
-import AgoraRTC from 'agora-rtc-sdk-ng'
+import type { IAgoraRTCClient, IAgoraRTCRemoteUser, ILocalTrack } from 'agora-rtc-sdk-ng'
 
 interface IRoomStore {
   _client?: IAgoraRTCClient
@@ -44,13 +43,13 @@ export const useAgoraStore = defineStore({
      */
     async init(user: UserDocument) {
       if(!this._client) {
-        this._client = AgoraRTC.createClient({
+        this._client = window.AgoraRTC.createClient({
           codec: 'h264',
           mode: 'rtc'
         })
       }
 
-      const [audio, camera] = await AgoraRTC.createMicrophoneAndCameraTracks()
+      const [audio, camera] = await window.AgoraRTC.createMicrophoneAndCameraTracks()
 
       this.users[0] = {
         ...user,

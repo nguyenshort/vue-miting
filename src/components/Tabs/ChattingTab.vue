@@ -92,14 +92,19 @@ const listRef = ref<HTMLDivElement>()
 const audio = new Audio('/mp3/message-notification-sfx.mp3');
 const count = ref(0)
 
+const roomStore = useRoomStore()
 watch(rawMessage, () => {
   nextTick(() => {
     if (listRef.value) {
       listRef.value.scrollTop = listRef.value.scrollHeight
-      if(count.value > 0) {
-        audio.play()
+
+      if(roomStore.messageSound) {
+        if(count.value > 0) {
+          audio.play()
+        }
+        count.value++
       }
-      count.value++
+
     }
   })
 })

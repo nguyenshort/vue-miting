@@ -36,6 +36,24 @@ const checkRouter = () => {
 }
 checkRouter()
 
+
+// cookies settings
+const cookies = useCookies()
+const roomStore = useRoomStore()
+const restoreSettings = () => {
+  const rawSettings = cookies?.get('settings')
+  if(rawSettings) {
+    const settings: Record<string, any> = JSON.parse(rawSettings)
+    roomStore.display = ['normal', 'mini'].includes(settings.display) ? settings.display : 'normal'
+    roomStore.messageSound = settings.messageSound
+    roomStore.sidebar = ['users', 'chat', 'settings'].includes(settings.sidebar) ? settings.sidebar : 'users'
+    roomStore.layout = ['sidebar', 'grid'].includes(settings.layout) ? settings.layout : 'sidebar'
+  }
+}
+restoreSettings()
+
+// Todo: cookie settings
+
 </script>
 
 <style scoped></style>

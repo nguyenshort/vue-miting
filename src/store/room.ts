@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 interface IRoomStore {
   layout: 'sidebar' | 'grid'
   sidebar?:  'users' | 'chat' | 'settings'
+  messageSound: boolean
+  display: 'normal' | 'mini'
 }
 
 export const useRoomStore = defineStore({
@@ -10,7 +12,9 @@ export const useRoomStore = defineStore({
 
   state: (): IRoomStore => ({
     layout: 'sidebar',
-    sidebar: 'users'
+    sidebar: 'users',
+    messageSound: true,
+    display: 'normal'
   }),
 
 
