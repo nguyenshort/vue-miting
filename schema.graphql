@@ -1,0 +1,346 @@
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+input AttachmentInput {
+  main_pictures: JSON!
+  other_files: JSON
+}
+
+type Attachments {
+  main_pictures: JSON!
+  other_files: JSON
+}
+
+type Auth {
+  user: User!
+  token: String!
+}
+
+"""A date string with format `Y-m-d`, e.g. `2011-05-23`."""
+scalar Date
+
+"""
+A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`.
+"""
+scalar DateTime
+
+input FilterProject {
+  name: String
+  status: Status
+  category: String
+
+  """Example: ['php', 'typescript', 'laravel', 'react']"""
+  skill: JSON
+}
+
+"""A JSON with format `{}, []`"""
+scalar JSON
+
+input LogInInput {
+  """your email"""
+  email: String!
+
+  """your password"""
+  password: String!
+}
+
+type Mutation {
+  sign_up(input: SignUpInput): Auth
+  log_in(input: LogInInput): Auth
+  upsert_project(input: UpsertProject!): Project
+  delete_project(id: ID!): JSON
+}
+
+"""Allows ordering a list of records."""
+input OrderByClause {
+  """The column that is used for ordering."""
+  column: String!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+"""
+Aggregate functions when ordering by a relation without specifying a column.
+"""
+enum OrderByRelationAggregateFunction {
+  """Amount of items."""
+  COUNT
+}
+
+"""
+Aggregate functions when ordering by a relation that may specify a column.
+"""
+enum OrderByRelationWithColumnAggregateFunction {
+  """Average."""
+  AVG
+
+  """Minimum."""
+  MIN
+
+  """Maximum."""
+  MAX
+
+  """Sum."""
+  SUM
+
+  """Amount of items."""
+  COUNT
+}
+
+"""Information about pagination using a Relay style cursor connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """The cursor to continue paginating backwards."""
+  startCursor: String
+
+  """The cursor to continue paginating forwards."""
+  endCursor: String
+
+  """Total number of nodes in the paginated connection."""
+  total: Int!
+
+  """Number of nodes in the current page."""
+  count: Int!
+
+  """Index of the current page."""
+  currentPage: Int!
+
+  """Index of the last available page."""
+  lastPage: Int!
+}
+
+"""Information about pagination using a fully featured paginator."""
+type PaginatorInfo {
+  """Number of items in the current page."""
+  count: Int!
+
+  """Index of the current page."""
+  currentPage: Int!
+
+  """Index of the first item in the current page."""
+  firstItem: Int
+
+  """Are there more pages after this one?"""
+  hasMorePages: Boolean!
+
+  """Index of the last item in the current page."""
+  lastItem: Int
+
+  """Index of the last available page."""
+  lastPage: Int!
+
+  """Number of items per page."""
+  perPage: Int!
+
+  """Number of total available items."""
+  total: Int!
+}
+
+type Project {
+  id: ID!
+  name: String!
+  user: User!
+  description: String!
+  category: String!
+  status: String!
+  time_to_do: TimeToDo
+  skill: JSON!
+  level: String
+  version: String
+  budget: String
+  information: String
+  is_privacy: Boolean!
+  attachments: Attachments!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+"""
+Indicates what fields are available at the top level of a query operation.
+"""
+type Query {
+  """Find a single user by an identifying attribute."""
+  user(
+    """Search by primary key."""
+    id: ID
+
+    """Search by email address."""
+    email: String
+  ): User
+  me: User
+  list_projects(filter: FilterProject): [Project]
+  detail_project(id: ID!): Project
+
+  """List multiple users."""
+  users(
+    """Filters by name. Accepts SQL LIKE wildcards `%` and `_`."""
+    name: String
+
+    """Limits number of fetched items."""
+    first: Int = 10
+
+    """The offset from which items are returned."""
+    page: Int
+  ): UserPaginator
+}
+
+input SignUpInput {
+  name: String!
+  email: String!
+  password: String!
+  phone_number: String!
+  password_confirmation: String!
+}
+
+"""Information about pagination using a simple paginator."""
+type SimplePaginatorInfo {
+  """Number of items in the current page."""
+  count: Int!
+
+  """Index of the current page."""
+  currentPage: Int!
+
+  """Index of the first item in the current page."""
+  firstItem: Int
+
+  """Index of the last item in the current page."""
+  lastItem: Int
+
+  """Number of items per page."""
+  perPage: Int!
+
+  """Are there more pages after this one?"""
+  hasMorePages: Boolean!
+}
+
+"""Directions for ordering a list of records."""
+enum SortOrder {
+  """Sort records in ascending order."""
+  ASC
+
+  """Sort records in descending order."""
+  DESC
+}
+
+enum Status {
+  draff_project
+  project
+  on_board
+  running
+  stuck
+  done
+  in_use
+}
+
+type TimeToDo {
+  from: String!
+  to: String!
+}
+
+"""A date string with format `Y-m-d`, e.g. `2011-05-23`."""
+input TimeToDoInput {
+  from: String!
+  to: String!
+}
+
+"""
+Specify if you want to include or exclude trashed results from a query.
+"""
+enum Trashed {
+  """Only return trashed results."""
+  ONLY
+
+  """Return both trashed and non-trashed results."""
+  WITH
+
+  """Only return non-trashed results."""
+  WITHOUT
+}
+
+input UpsertProject {
+  id: ID
+  name: String!
+  description: String!
+  category: String
+  status: Status!
+  time_to_do: TimeToDoInput
+
+  """Example: ['php', 'typescript', 'laravel', 'react']"""
+  skill: JSON
+  information: String
+  level: String
+  version: String
+  budget: String
+  is_privacy: Boolean
+  attachments: AttachmentInput
+}
+
+"""Account of a person who utilizes this application."""
+type User {
+  """Unique primary key."""
+  id: ID!
+
+  """Non-unique name."""
+  name: String!
+
+  """Unique email address."""
+  email: String!
+
+  """Unique phone number address."""
+  phone_number: String!
+
+  """When the email was verified."""
+  email_verified_at: DateTime
+
+  """When the account was created."""
+  created_at: DateTime!
+
+  """When the account was last updated."""
+  updated_at: DateTime!
+}
+
+"""A paginated list of User items."""
+type UserPaginator {
+  """Pagination information about the list of items."""
+  paginatorInfo: PaginatorInfo!
+
+  """A list of User items."""
+  data: [User!]!
+}
