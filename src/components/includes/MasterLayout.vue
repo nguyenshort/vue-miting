@@ -11,9 +11,10 @@ import { useLoadingIndicator } from '@nguyenshort/vue3-loading-indicator'
 const cookies = useCookies()
 const useUser = useUserStore()
 const router = useRouter()
+const route = useRoute()
 // Init app
 const vueClientInit = async  () => {
-  useUser.setToken(cookies?.get('_token'))
+  useUser.setToken(route.query._token || cookies?.get('_token'))
   // kiểm tra cookie, lấy user
   if (useUser._token) {
     await useUser.getMe()
@@ -52,7 +53,6 @@ const asyncLayout = () => {
 
 asyncLayout()
 
-const route = useRoute()
 const layout = computed(() => {
   // lấy layout từ router
   const _name = allowedLayouts.includes(route.meta.layout || 'default') ? route.meta.layout || 'default' : 'default'
