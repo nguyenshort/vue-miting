@@ -21,12 +21,14 @@
 <script lang='ts' setup>
 
 const router = useRouter()
+const route = useRoute()
 const agoraStore = useAgoraStore()
 const userStore = useUserStore()
 
 const leaveRoom = async () => {
   await agoraStore.leave()
   userStore.logout()
+  await userStore.writeLog(route.params.id as string, 'left')
   await router.push('/')
 }
 

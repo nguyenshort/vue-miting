@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { UserDocument } from '@entities/user'
+import { v4 as uuidv4 } from 'uuid'
+import { LogDocument } from '@entities/log'
 
 interface IUserStore {
   user?: UserDocument
@@ -34,6 +36,18 @@ export const useUserStore = defineStore({
       } catch (e) {
         //
       }
+    },
+
+    async writeLog(chanel: string, group: 'join' | 'left') {
+      await dbSet(dbRef(getDatabase(), `room/${chanel}/logs/${uuidv4()}`),{
+        user: {
+          id: this.user?.id,
+          name: this.user?.name,
+          avatar: this.user?.avatar,
+        },
+        group,
+        createdAt: Date.now()
+      } as LogDocument)
     },
 
     logout() {

@@ -59,6 +59,7 @@ import { ILocalAudioTrack, ILocalVideoTrack } from 'agora-rtc-sdk-ng'
 import { UserMedia } from '@entities/user'
 import { useRTDB } from '@vueuse/firebase/useRTDB'
 
+const userStore = useUserStore()
 const agoraStore = useAgoraStore()
 const roomStore = useRoomStore()
 const route = useRoute()
@@ -93,6 +94,7 @@ const router = useRouter()
 const leaveRoom = async () => {
   await agoraStore.leave()
   message.success('Thoát phòng thành công')
+  await userStore.writeLog(route.params.id as string, 'left')
   await router.push('/')
 }
 </script>

@@ -117,6 +117,7 @@ import { ref as dbRef } from '@firebase/database'
 import { getDatabase } from 'firebase/database'
 import { ILocalAudioTrack, ILocalVideoTrack } from 'agora-rtc-sdk-ng'
 
+const userStore = useUserStore()
 const agoraStore = useAgoraStore()
 
 const showUsers = ref(false)
@@ -211,6 +212,7 @@ watch(media, (value) => {
 const router = useRouter()
 const leaveRoom = async () => {
   await agoraStore.leave()
+  await userStore.writeLog(route.params.id as string, 'left')
   message.success('Thoát phòng thành công')
   await router.push('/')
 }

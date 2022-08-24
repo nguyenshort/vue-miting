@@ -148,8 +148,10 @@ watch(media, (value) => {
 })
 
 const router = useRouter()
+const userStore = useUserStore()
 const leaveRoom = async () => {
   await agoraStore.leave()
+  await userStore.writeLog(route.params.id as string, 'left')
   message.success('Thoát phòng thành công')
   await router.push('/')
 }

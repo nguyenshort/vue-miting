@@ -82,6 +82,9 @@ const join = async () => {
     await agoraStore.join(chanel.value)
     modalRef.value?.dispose()
     loading.value = false
+
+    await userStore.writeLog(chanel.value, 'join')
+
     await router.push('/room/' + chanel.value)
   }, 300)
 }

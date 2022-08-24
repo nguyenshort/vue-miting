@@ -7,6 +7,7 @@ import DesktopView from '@components/room/DesktopView.vue'
 import MobileView from '@components/room/MobileView.vue'
 
 const agoraStore = useAgoraStore()
+const userStore = useUserStore()
 
 const breakpoints = useBreakpoints({
   table: 1000
@@ -53,6 +54,15 @@ const restoreSettings = () => {
 restoreSettings()
 
 // Todo: cookie settings
+
+onMounted(() => {
+  window.addEventListener('beforeunload', async () => {
+    if(Object.values(agoraStore.users).length !== 0) {
+      await userStore.writeLog(route.params.id as string, 'left')
+    }
+  });
+})
+
 
 </script>
 

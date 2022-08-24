@@ -116,9 +116,11 @@ const contentHeight = computed(() => {
 
 const router = useRouter()
 const agoraStore = useAgoraStore()
+const route = useRoute()
 
 const leaveRoom = async () => {
   await agoraStore.leave()
+  await userStore.writeLog(route.params.id as string, 'left')
   message.success('Thoát phòng thành công')
   await router.push('/')
 }
