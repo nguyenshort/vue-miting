@@ -19,6 +19,7 @@
     "createUnrefFn": true,
     "customRef": true,
     "dbRef": true,
+    "dbRemove": true,
     "dbSet": true,
     "debouncedRef": true,
     "debouncedWatch": true,

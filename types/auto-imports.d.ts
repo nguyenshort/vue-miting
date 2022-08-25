@@ -20,6 +20,7 @@ declare global {
   const createUnrefFn: typeof import('@vueuse/core')['createUnrefFn']
   const customRef: typeof import('vue')['customRef']
   const dbRef: typeof import('firebase/database')['ref']
+  const dbRemove: typeof import('firebase/database')['remove']
   const dbSet: typeof import('firebase/database')['set']
   const debouncedRef: typeof import('@vueuse/core')['debouncedRef']
   const debouncedWatch: typeof import('@vueuse/core')['debouncedWatch']

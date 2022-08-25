@@ -45,7 +45,8 @@ export default ({ mode }) => {
             'firebase/database': [
               ['ref', 'dbRef'],
               ['set', 'dbSet'],
-              'getDatabase'
+              'getDatabase',
+              ['remove', 'dbRemove']
             ],
             'ant-design-vue': [
               'message'
