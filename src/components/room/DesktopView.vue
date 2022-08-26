@@ -18,10 +18,48 @@
           <span class='text-[13px] ml-2'>Chatting</span>
         </button>
 
-        <button class='flex items-center text-gray-500 ml-7'>
-          <i-bx-video-recording class='text-[18px]' />
-          <span class='text-[13px] ml-2'>Mettings</span>
-        </button>
+        <a-dropdown trigger='click'>
+
+          <button class='flex items-center text-gray-500 ml-7'>
+            <i-bx-video-recording class='text-[18px]' />
+            <span class='text-[13px] ml-2'>Mettings</span>
+          </button>
+
+          <template #overlay>
+
+            <a-menu>
+
+              <a-menu-item>
+
+                <div class='flex items-center justify-between'>
+                  <div class='mr-3 flex items-center'>
+                    <h4 class='mb-0 text-[17px] font-semibold'>Lời Mời</h4>
+
+                    <span>({{ invites.length }})</span>
+
+                  </div>
+
+                  <a-button type='link' class='ml-auto' size='small'>
+                    <span class='text-xs'>
+                      Xoá
+                    </span>
+                  </a-button>
+                </div>
+
+              </a-menu-item>
+
+              <div class='max-h-[60vh] overflow-y-auto scrollbar-hide'>
+                <a-menu-item
+                  v-for='invite in invites'
+                  :key='invite.id'
+                >
+                  <invite-item :invite='invite' />
+                </a-menu-item>
+              </div>
+            </a-menu>
+
+          </template>
+        </a-dropdown>
 
         <button class='flex items-center text-gray-500 ml-7'>
           <i-material-symbols-android-contacts-outline class='text-[18px]' />
@@ -98,6 +136,9 @@
 </template>
 
 <script lang='ts' setup>
+import { useRTDB } from '@vueuse/firebase'
+import { InviteDocument } from '@entities/invite'
+
 const roomStore = useRoomStore()
 const userStore = useUserStore()
 
@@ -124,6 +165,14 @@ const leaveRoom = async () => {
   message.success('Thoát phòng thành công')
   await router.push('/')
 }
+
+// List meeting
+const rawInvites = useRTDB<Record<string, InviteDocument>>(dbRef(getDatabase(), `invites/${userStore.user?.id}`))
+const invites = computed<InviteDocument[]>(() => {
+  return Object.values(rawInvites.value || {}).sort((a: InviteDocument, b: InviteDocument) => {
+    return a.createdAt - b.createdAt
+  })
+})
 </script>
 
 <style scoped>

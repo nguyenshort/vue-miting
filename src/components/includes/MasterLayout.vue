@@ -10,7 +10,31 @@ import { useLoadingIndicator } from '@nguyenshort/vue3-loading-indicator'
 
 const cookies = useCookies()
 const useUser = useUserStore()
+const agoraStore = useAgoraStore()
 const router = useRouter()
+
+router.beforeEach(async (to, from, next) => {
+  if(to.meta.private && !useUser.auth) {
+    return next({
+      name: 'index',
+      query: {
+        returnChanel: to.params.id
+      }
+    })
+  }
+
+  if(to.name === 'room-id' && !agoraStore.client) {
+    return next({
+      name: 'index',
+      query: {
+        returnChanel: to.params.id
+      }
+    })
+  }
+
+  next()
+
+})
 
 const route = useRoute()
 // Init app

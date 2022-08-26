@@ -1,7 +1,9 @@
 <template>
-  <mb-header />
-  <mb-body id='mb-body' />
-  <mb-bottom />
+  <div>
+    <mb-header />
+    <mb-body id='mb-body' />
+    <mb-bottom />
+  </div>
 </template>
 
 <script lang='ts' setup>

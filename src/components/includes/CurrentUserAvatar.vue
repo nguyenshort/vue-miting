@@ -27,8 +27,8 @@ const userStore = useUserStore()
 
 const leaveRoom = async () => {
   await agoraStore.leave()
-  userStore.logout()
   await userStore.writeLog(route.params.id as string, 'left')
+  userStore.logout()
   await router.push('/')
 }
 

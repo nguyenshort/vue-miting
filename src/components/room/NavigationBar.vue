@@ -64,9 +64,46 @@
       </template>
     </a-dropdown>
 
-    <button class='text-primary-500 h-full px-5 bg-primary-50 rounded-lg'>
-      <i-akar-icons-share-arrow />
-    </button>
+    <a-dropdown placement="topLeft" trigger='click'>
+
+      <button class='text-primary-500 h-full px-5 bg-primary-50 rounded-lg'>
+        <i-akar-icons-share-arrow />
+      </button>
+
+      <template #overlay>
+
+        <a-menu>
+
+          <a-menu-item>
+
+            <div class='flex items-center justify-between pb-2'>
+              <div class='mr-3 flex items-center'>
+                <h4 class='mb-0 text-[17px] font-semibold'>Thành Viên</h4>
+
+                <span>({{ roomStore.members.length }})</span>
+
+              </div>
+
+              <a-button type='primary' class='ml-auto' size='small' :disabled='!!skipTime' @click.stop='inviteAll'>
+                Mời Cả Lớp
+                <span v-if='skipTime' class='text-xs ml-1'>({{ skipTime }})</span>
+              </a-button>
+            </div>
+
+          </a-menu-item>
+
+          <div class='max-h-[60vh] overflow-y-auto scrollbar-hide'>
+            <a-menu-item
+              v-for='member in roomStore.members.filter(member => member.id !== userStore?.user?.id)'
+              :key='member.id'
+            >
+              <invite-member-item :member='member' :disabled='!!skipTime' />
+            </a-menu-item>
+          </div>
+        </a-menu>
+
+      </template>
+    </a-dropdown>
 
     <div class='absolute right-3 py-3 h-full'>
       <button class='text-white h-full px-5 bg-rose-600 rounded-lg shadow-md shadow-rose-300' @click='leaveRoom'>
@@ -110,6 +147,7 @@ import { ref as dbRef } from '@firebase/database'
 import { getDatabase } from 'firebase/database'
 import { ILocalAudioTrack, ILocalVideoTrack } from 'agora-rtc-sdk-ng'
 import { UserMedia } from '@entities/user'
+import { v4 as uuidv4 } from 'uuid'
 
 const roomStore = useRoomStore()
 const agoraStore = useAgoraStore()
@@ -156,6 +194,36 @@ const leaveRoom = async () => {
   await router.push('/')
 }
 
+const skipTime = ref(0)
+const inviteAll = async () => {
+  skipTime.value = 30
+  const timer = setInterval(() => {
+    skipTime.value--
+    if(skipTime.value === 0) {
+      clearInterval(timer)
+    }
+  }, 1000)
+
+  await Promise.all(
+    roomStore.members.filter((member) => member.id !== userStore.user?.id).map(async (member) => {
+      const uid = uuidv4()
+      await dbSet(dbRef(getDatabase(), `invites/${member.id}/${uid}`),{
+        id: uid,
+        from: {
+          id: userStore.user?.id,
+          name: userStore.user?.name,
+          avatar: userStore.user?.avatar
+        },
+        to: {
+          id: roomStore.goal?.id,
+          name: roomStore.goal?.name
+        },
+        disabled: false,
+        createdAt: Date.now()
+      })
+    })
+  )
+}
 </script>
 
 <style scoped>
