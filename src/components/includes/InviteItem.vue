@@ -1,7 +1,10 @@
 <template>
   <div class='py-2'>
 
-    <div class='flex items-center'>
+    <div
+      class='flex items-center transition'
+      :class='[invite.disabled ? "opacity-50" : ""]'
+    >
       <a
         href='javascript:void(0)'
         class='block w-[30px] h-[30px] rounded-full overflow-hidden'
@@ -13,7 +16,7 @@
         <h4 class='mb-0 font-semibold'>{{ invite.from.name }}</h4>
       </div>
 
-      <span class='ml-auto text-green-500'>
+      <span v-if='!invite.disabled' class='ml-auto text-green-500'>
         <i-radix-icons-dot-filled />
       </span>
     </div>

@@ -4,6 +4,8 @@ import { GoalDocument } from '@entities/goal'
 export interface InviteDocument {
   id: string|number
   from: UserDocument
-  to: GoalDocument
+  to: UserDocument
+  goal: GoalDocument
   createdAt: number
+  disabled: boolean
 }

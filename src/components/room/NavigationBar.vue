@@ -72,7 +72,7 @@
 
       <template #overlay>
 
-        <a-menu>
+        <a-menu :key='notInRoom.length'>
 
           <a-menu-item>
 
@@ -80,7 +80,7 @@
               <div class='mr-3 flex items-center'>
                 <h4 class='mb-0 text-[17px] font-semibold'>Thành Viên</h4>
 
-                <span>({{ roomStore.members.length }})</span>
+                <span>({{ notInRoom.length }})</span>
 
               </div>
 
@@ -94,7 +94,7 @@
 
           <div class='max-h-[60vh] overflow-y-auto scrollbar-hide'>
             <a-menu-item
-              v-for='member in roomStore.members.filter(member => member.id !== userStore?.user?.id)'
+              v-for='member in notInRoom'
               :key='member.id'
             >
               <invite-member-item :member='member' :disabled='!!skipTime' />
@@ -148,6 +148,7 @@ import { getDatabase } from 'firebase/database'
 import { ILocalAudioTrack, ILocalVideoTrack } from 'agora-rtc-sdk-ng'
 import { UserMedia } from '@entities/user'
 import { v4 as uuidv4 } from 'uuid'
+import { InviteDocument } from '@entities/invite'
 
 const roomStore = useRoomStore()
 const agoraStore = useAgoraStore()
@@ -195,6 +196,12 @@ const leaveRoom = async () => {
 }
 
 const skipTime = ref(0)
+
+const notInRoom = computed(
+  () => roomStore.members
+    .filter(member => agoraStore.users.findIndex((e) => e.id === member.id) === -1)
+)
+
 const inviteAll = async () => {
   skipTime.value = 30
   const timer = setInterval(() => {
@@ -205,9 +212,9 @@ const inviteAll = async () => {
   }, 1000)
 
   await Promise.all(
-    roomStore.members.filter((member) => member.id !== userStore.user?.id).map(async (member) => {
+    notInRoom.value.map(async (member) => {
       const uid = uuidv4()
-      await dbSet(dbRef(getDatabase(), `invites/${member.id}/${uid}`),{
+      await dbSet(dbRef(getDatabase(), `invites/${member.id}/${route.params?.id}/${uid}`),{
         id: uid,
         from: {
           id: userStore.user?.id,
@@ -215,12 +222,16 @@ const inviteAll = async () => {
           avatar: userStore.user?.avatar
         },
         to: {
-          id: roomStore.goal?.id,
+          id: member.id,
+          name: member.name
+        },
+        goal: {
+          id: route.params?.id,
           name: roomStore.goal?.name
         },
         disabled: false,
         createdAt: Date.now()
-      })
+      } as InviteDocument)
     })
   )
 }

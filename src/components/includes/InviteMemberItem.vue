@@ -35,6 +35,8 @@ const skipTime = ref(0)
 
 const userStore = useUserStore()
 const roomStore = useRoomStore()
+const route = useRoute()
+
 const inviteMember = async (member: UserDocument) => {
   skipTime.value = 30
   const timer = setInterval(() => {
@@ -45,7 +47,7 @@ const inviteMember = async (member: UserDocument) => {
   }, 1000)
 
   const uid = uuidv4()
-  await dbSet(dbRef(getDatabase(), `invites/${member.id}/${uid}`),{
+  await dbSet(dbRef(getDatabase(), `invites/${member.id}/${route.params?.id}/${uid}`),{
     id: uid,
     from: {
       id: userStore.user?.id,
@@ -53,7 +55,11 @@ const inviteMember = async (member: UserDocument) => {
       avatar: userStore.user?.avatar
     },
     to: {
-      id: roomStore.goal?.id,
+      id: member.id,
+      name: member.name
+    },
+    goal: {
+      id: route.params?.id,
       name: roomStore.goal?.name
     },
     disabled: false,

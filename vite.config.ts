@@ -46,7 +46,8 @@ export default ({ mode }) => {
               ['ref', 'dbRef'],
               ['set', 'dbSet'],
               'getDatabase',
-              ['remove', 'dbRemove']
+              ['remove', 'dbRemove'],
+              ['get', 'dbGet'],
             ],
             'ant-design-vue': [
               'message'

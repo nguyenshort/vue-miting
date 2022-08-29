@@ -19,6 +19,7 @@ declare global {
   const createSharedComposable: typeof import('@vueuse/core')['createSharedComposable']
   const createUnrefFn: typeof import('@vueuse/core')['createUnrefFn']
   const customRef: typeof import('vue')['customRef']
+  const dbGet: typeof import('firebase/database')['get']
   const dbRef: typeof import('firebase/database')['ref']
   const dbRemove: typeof import('firebase/database')['remove']
   const dbSet: typeof import('firebase/database')['set']

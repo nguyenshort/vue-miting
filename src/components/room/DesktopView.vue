@@ -20,14 +20,23 @@
 
         <a-dropdown trigger='click'>
 
-          <button class='flex items-center text-gray-500 ml-7'>
-            <i-bx-video-recording class='text-[18px]' />
+          <button
+            class='flex items-center ml-7 relative'
+            :class='[ activeInvites.length ? "text-primary-500" : "text-gray-500"]'
+          >
+            <div
+              v-if='activeInvites.length'
+              class='w-3.5 h-3.5 flex items-center justify-center rounded-full bg-rose-500 text-white text-[9px] absolute -top-2 left-3.5 z-10'
+            >
+              {{ activeInvites.length }}
+            </div>
+            <i-bx-video-recording class='text-[18px] relative z-20' />
             <span class='text-[13px] ml-2'>Mettings</span>
           </button>
 
-          <template #overlay>
+          <template v-if='invites.length' #overlay>
 
-            <a-menu>
+            <a-menu :key='invites.length'>
 
               <a-menu-item>
 
@@ -39,7 +48,7 @@
 
                   </div>
 
-                  <a-button type='link' class='ml-auto' size='small'>
+                  <a-button type='link' class='ml-auto' size='small' @click='deleteAll'>
                     <span class='text-xs'>
                       Xoá
                     </span>
@@ -167,12 +176,22 @@ const leaveRoom = async () => {
 }
 
 // List meeting
-const rawInvites = useRTDB<Record<string, InviteDocument>>(dbRef(getDatabase(), `invites/${userStore.user?.id}`))
+const rawInvites = useRTDB<Record<string, Record<string, InviteDocument>>>(dbRef(getDatabase(), `invites/${userStore.user?.id}`))
 const invites = computed<InviteDocument[]>(() => {
-  return Object.values(rawInvites.value || {}).sort((a: InviteDocument, b: InviteDocument) => {
-    return a.createdAt - b.createdAt
-  })
+  return Object.values(rawInvites.value || {}).flatMap(invites => Object.values(invites)).sort((a, b) => b.createdAt - a.createdAt)
 })
+
+const activeInvites = computed<InviteDocument[]>(() => {
+  return invites.value.filter(invite => !invite.disabled)
+})
+
+const deleteAll = async () => {
+  try {
+    await dbRemove(dbRef(getDatabase(), `invites/${userStore.user?.id}`))
+  } catch (e) {
+    //
+  }
+}
 </script>
 
 <style scoped>

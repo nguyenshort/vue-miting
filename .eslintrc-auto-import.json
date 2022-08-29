@@ -18,6 +18,7 @@
     "createSharedComposable": true,
     "createUnrefFn": true,
     "customRef": true,
+    "dbGet": true,
     "dbRef": true,
     "dbRemove": true,
     "dbSet": true,

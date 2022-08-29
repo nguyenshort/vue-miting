@@ -6,6 +6,7 @@
 import DesktopView from '@components/room/DesktopView.vue'
 import MobileView from '@components/room/MobileView.vue'
 import { GoalDocument } from '@entities/goal'
+import { InviteDocument } from '@entities/invite'
 
 const agoraStore = useAgoraStore()
 const userStore = useUserStore()
@@ -33,6 +34,42 @@ const getMembers = async () => {
   }
 }
 
+// đánh giấu lời mời
+const checkInvite = async () => {
+  // đánh giấu tất cả lời mời thuộc phòng hiện tại
+  const docRef = await dbGet(dbRef(getDatabase(), `invites/${userStore.user?.id}/${route.params.id}`))
+  // kiểm tra user có phải là primary user hay ko bằng cách kiểm tra from của lời mười gâần rất của room
+  if (docRef.exists()) {
+    const invites: InviteDocument[] = Object.values(docRef.val())
+    const lastInvite = invites.sort((a, b) => b.createdAt - a.createdAt)[0]
+
+    // User hiện tại là primary user
+    if(lastInvite?.from?.id === userStore.user?.id) {
+      return
+    }
+
+    return
+    // Đánh giấu tất cả các lời mời của mn trong phòng
+    await Promise.all(
+      roomStore.members.map(async member => {
+        const docRef = await dbGet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id}`))
+        // console.log(`invites/${member.id}/${route.params.id}`, docRef.val())
+        if (docRef.exists()) {
+          const invites2: InviteDocument[] = Object.values(docRef.val())
+          await Promise.all([
+            invites2.filter(e => !e.disabled).map(async (invite) => {
+              await dbSet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id}/${invite.id}`), {
+                ...invite,
+                disabled: true
+              } as InviteDocument)
+            })
+          ])
+        }
+      })
+    )
+  }
+}
+
 /**
  * Kiểm tra xem phòng có phải âf phòng học hay ko...
  */
@@ -42,6 +79,7 @@ const checkRoomAsync = async () => {
     if(result) {
       roomStore.goal = result
       await getMembers()
+      await checkInvite()
     }
   } catch (e) {
     //
