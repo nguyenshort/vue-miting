@@ -29,7 +29,7 @@ const emitter = useEmitter()
 const leaveRoom = async () => {
   await agoraStore.leave()
   await userStore.writeLog(route.params.id as string, 'left')
-  emitter.emit('checkDisabled')
+  emitter.emit('checkDisabled', route.params.id)
   userStore.logout()
   await router.push('/')
 }

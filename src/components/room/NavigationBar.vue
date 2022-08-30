@@ -193,7 +193,7 @@ const leaveRoom = async () => {
   await agoraStore.leave()
   await userStore.writeLog(route.params.id as string, 'left')
   message.success('Thoát phòng thành công')
-  emitter.emit('checkDisabled')
+  emitter.emit('checkDisabled', route.params.id)
   await router.push('/')
 }
 

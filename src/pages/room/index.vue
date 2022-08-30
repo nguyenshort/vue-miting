@@ -53,15 +53,15 @@ const checkInvite = async () => {
   }
 }
 
-const checkDisabled = async () => {
+const checkDisabled = async (chanel = '') => {
   await Promise.all(
     roomStore.members.map(async member => {
-      const docRef = await dbGet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id}`))
+      const docRef = await dbGet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id || chanel}`))
       if (docRef.exists()) {
         const invites2: InviteDocument[] = Object.values(docRef.val())
         await Promise.all([
           invites2.filter(e => !e.disabled).map(async (invite) => {
-            await dbSet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id}/${invite.id}`), {
+            await dbSet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id || chanel}/${invite.id}`), {
               ...invite,
               disabled: true
             } as InviteDocument)
@@ -88,7 +88,9 @@ const checkRoomAsync = async () => {
   }
 }
 
-const emitter = useEmitter()
+const emitter = useEmitter<{
+  checkDisabled: string
+}>()
 
 onMounted(() => nextTick(async () => {
   window.addEventListener('beforeunload', async (e) => {
@@ -98,7 +100,7 @@ onMounted(() => nextTick(async () => {
     }
   });
   await checkRoomAsync()
-  emitter.on('checkDisabled', async () => checkDisabled())
+  emitter.on('checkDisabled', async (chanel: string) => checkDisabled(chanel))
 }))
 
 // await checkRoomAsync()
