@@ -40,34 +40,36 @@ const checkInvite = async () => {
   const docRef = await dbGet(dbRef(getDatabase(), `invites/${userStore.user?.id}/${route.params.id}`))
   // kiểm tra user có phải là primary user hay ko bằng cách kiểm tra from của lời mười gâần rất của room
   if (docRef.exists()) {
-    const invites: InviteDocument[] = Object.values(docRef.val())
-    const lastInvite = invites.sort((a, b) => b.createdAt - a.createdAt)[0]
+    // const invites: InviteDocument[] = Object.values<InviteDocument>(docRef.val())
+    //   .filter(invite => invite.from.id === userStore.user?.id)
+    // const lastInvite = invites.sort((a, b) => b.createdAt - a.createdAt)[0]
 
     // User hiện tại là primary user
-    if(lastInvite?.from?.id === userStore.user?.id) {
-      return
-    }
-
-    return
+    // if(lastInvite?.from?.id === userStore.user?.id) {
+    //   return
+    // }
     // Đánh giấu tất cả các lời mời của mn trong phòng
-    await Promise.all(
-      roomStore.members.map(async member => {
-        const docRef = await dbGet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id}`))
-        // console.log(`invites/${member.id}/${route.params.id}`, docRef.val())
-        if (docRef.exists()) {
-          const invites2: InviteDocument[] = Object.values(docRef.val())
-          await Promise.all([
-            invites2.filter(e => !e.disabled).map(async (invite) => {
-              await dbSet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id}/${invite.id}`), {
-                ...invite,
-                disabled: true
-              } as InviteDocument)
-            })
-          ])
-        }
-      })
-    )
+    await checkDisabled()
   }
+}
+
+const checkDisabled = async () => {
+  await Promise.all(
+    roomStore.members.map(async member => {
+      const docRef = await dbGet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id}`))
+      if (docRef.exists()) {
+        const invites2: InviteDocument[] = Object.values(docRef.val())
+        await Promise.all([
+          invites2.filter(e => !e.disabled).map(async (invite) => {
+            await dbSet(dbRef(getDatabase(), `invites/${member.id}/${route.params.id}/${invite.id}`), {
+              ...invite,
+              disabled: true
+            } as InviteDocument)
+          })
+        ])
+      }
+    })
+  )
 }
 
 /**
@@ -86,13 +88,17 @@ const checkRoomAsync = async () => {
   }
 }
 
+const emitter = useEmitter()
+
 onMounted(() => nextTick(async () => {
-  window.addEventListener('beforeunload', async () => {
+  window.addEventListener('beforeunload', async (e) => {
     if(Object.values(agoraStore.users).length !== 0) {
       await userStore.writeLog(route.params.id as string, 'left')
+     await checkDisabled()
     }
   });
   await checkRoomAsync()
+  emitter.on('checkDisabled', async () => checkDisabled())
 }))
 
 // await checkRoomAsync()

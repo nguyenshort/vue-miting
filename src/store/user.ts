@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { UserDocument } from '@entities/user'
 import { v4 as uuidv4 } from 'uuid'
 import { LogDocument } from '@entities/log'
+import { InviteDocument } from '@entities/invite'
 
 interface IUserStore {
   user?: UserDocument
@@ -54,5 +55,5 @@ export const useUserStore = defineStore({
       this._token = ''
       this.user = undefined
     }
-  }
+  },
 })

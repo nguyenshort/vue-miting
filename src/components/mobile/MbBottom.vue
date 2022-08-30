@@ -91,10 +91,13 @@ watch(media, (value) => {
 })
 
 const router = useRouter()
+const emitter = useEmitter()
+
 const leaveRoom = async () => {
   await agoraStore.leave()
   message.success('Thoát phòng thành công')
   await userStore.writeLog(route.params.id as string, 'left')
+  emitter.emit('checkDisabled')
   await router.push('/')
 }
 </script>

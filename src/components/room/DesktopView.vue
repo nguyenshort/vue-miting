@@ -168,10 +168,12 @@ const router = useRouter()
 const agoraStore = useAgoraStore()
 const route = useRoute()
 
+const emitter = useEmitter()
 const leaveRoom = async () => {
   await agoraStore.leave()
   await userStore.writeLog(route.params.id as string, 'left')
   message.success('Thoát phòng thành công')
+  emitter.emit('checkDisabled')
   await router.push('/')
 }
 

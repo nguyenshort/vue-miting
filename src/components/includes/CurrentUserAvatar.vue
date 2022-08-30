@@ -25,9 +25,11 @@ const route = useRoute()
 const agoraStore = useAgoraStore()
 const userStore = useUserStore()
 
+const emitter = useEmitter()
 const leaveRoom = async () => {
   await agoraStore.leave()
   await userStore.writeLog(route.params.id as string, 'left')
+  emitter.emit('checkDisabled')
   userStore.logout()
   await router.push('/')
 }
