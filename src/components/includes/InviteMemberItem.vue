@@ -8,8 +8,21 @@
       <img :src='member.avatar' alt='' />
     </a>
 
-    <div class='ml-1.5 mr-3'>
+    <div class='ml-2 mr-3'>
       <h4 class='mb-0'>{{ member.name }}</h4>
+
+      <template
+        v-if='["owner", "coach"].includes(member.type)'
+      >
+        <span v-if='member.type === "owner"' class='text-white bg-rose-500 text-[11px] px-1.5 py-px rounded-lg'>
+          {{ member.type }}
+        </span>
+
+        <span v-else class='text-white bg-primary-600 text-[11px] px-1.5 py-px rounded-lg'>
+          {{ member.type }}
+        </span>
+      </template>
+
     </div>
 
     <a-button type='primary' class='ml-auto' size='small' :disabled='!!skipTime || disabled' @click.stop='inviteMember(member)'>

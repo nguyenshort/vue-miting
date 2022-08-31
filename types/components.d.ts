@@ -18,6 +18,7 @@ declare module '@vue/runtime-core' {
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     APopover: typeof import('ant-design-vue/es')['Popover']
     ASwitch: typeof import('ant-design-vue/es')['Switch']
+    ATag: typeof import('ant-design-vue/es')['Tag']
     AudioStream: typeof import('./../src/components/stream/AudioStream.vue')['default']
     AuthModal: typeof import('./../src/components/modal/AuthModal.vue')['default']
     ChattingTab: typeof import('./../src/components/Tabs/ChattingTab.vue')['default']

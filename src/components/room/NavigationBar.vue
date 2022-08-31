@@ -76,25 +76,38 @@
 
           <a-menu-item>
 
-            <div class='flex items-center justify-between pb-2'>
-              <div class='mr-3 flex items-center'>
-                <h4 class='mb-0 text-[17px] font-semibold'>Thành Viên</h4>
+            <div>
+              <div class='flex items-center justify-between pb-2'>
+                <div class='mr-3 flex items-center'>
+                  <h4 class='mb-0 text-[17px] font-semibold'>Thành Viên</h4>
 
-                <span>({{ notInRoom.length }})</span>
+                  <span>({{ notInRoom.length }})</span>
 
+                </div>
+
+                <a-button type='primary' class='ml-auto' size='small' :disabled='!!skipTime' @click.stop='inviteAll'>
+                  Mời Cả Lớp
+                  <span v-if='skipTime' class='text-xs ml-1'>({{ skipTime }})</span>
+                </a-button>
               </div>
 
-              <a-button type='primary' class='ml-auto' size='small' :disabled='!!skipTime' @click.stop='inviteAll'>
-                Mời Cả Lớp
-                <span v-if='skipTime' class='text-xs ml-1'>({{ skipTime }})</span>
-              </a-button>
+              <div>
+                <input
+                  v-model='keyword'
+                  class='w-full focus:outline-0 px-3 rounded-lg bg-gray-100 py-1.5 focus:bg-white'
+                  type='text'
+                  placeholder='Tìm kiếm...'
+                  @click.stop
+                />
+              </div>
+
             </div>
 
           </a-menu-item>
 
-          <div class='max-h-[60vh] overflow-y-auto scrollbar-hide'>
+          <div :key='searchResult.length' class='max-h-[60vh] overflow-y-auto scrollbar-hide pt-1'>
             <a-menu-item
-              v-for='member in notInRoom'
+              v-for='member in searchResult'
               :key='member.id'
             >
               <invite-member-item :member='member' :disabled='!!skipTime' />
@@ -237,6 +250,16 @@ const inviteAll = async () => {
     })
   )
 }
+
+const keyword = ref('')
+
+const searchResult = computed(() => {
+  if(!keyword.value) {
+    return notInRoom.value
+  }
+  return notInRoom.value.filter(member => member.name?.toLowerCase().includes(keyword.value.toLowerCase()))
+})
+
 </script>
 
 <style scoped>

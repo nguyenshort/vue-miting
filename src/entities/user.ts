@@ -9,6 +9,8 @@ interface User {
 
   audioTrack?: IMicrophoneAudioTrack | IRemoteAudioTrack
   videoTrack?: ICameraVideoTrack | IRemoteVideoTrack
+
+  type?: 'owner' | 'coach' | 'student'
 }
 
 export type UserDocument = User
