@@ -14,7 +14,7 @@
       <template
         v-if='["owner", "coach"].includes(member.type)'
       >
-        <span v-if='member.type === "owner"' class='text-white bg-rose-500 text-[11px] px-1.5 py-px rounded-lg'>
+        <span v-if='member.type === "owner"' class='text-white bg-orange-500 text-[11px] px-1.5 py-px rounded-lg'>
           {{ member.type }}
         </span>
 

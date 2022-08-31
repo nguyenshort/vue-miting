@@ -37,6 +37,7 @@ declare module '@vue/runtime-core' {
     ICarbonCloseFilled: typeof import('~icons/carbon/close-filled')['default']
     ICarbonGrid: typeof import('~icons/carbon/grid')['default']
     ICilAudioSpectrum: typeof import('~icons/cil/audio-spectrum')['default']
+    IFa6RegularFaceSmileBeam: typeof import('~icons/fa6-regular/face-smile-beam')['default']
     IFluentCallEnd28Regular: typeof import('~icons/fluent/call-end28-regular')['default']
     IFluentChat24Regular: typeof import('~icons/fluent/chat24-regular')['default']
     IFluentRecord28Regular: typeof import('~icons/fluent/record28-regular')['default']

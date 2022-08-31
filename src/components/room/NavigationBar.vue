@@ -67,7 +67,7 @@
     <a-dropdown placement="topLeft" trigger='click'>
 
       <button class='text-primary-500 h-full px-5 bg-primary-50 rounded-lg'>
-        <i-akar-icons-share-arrow />
+        <img alt='' src='/images/communication_v2.png' class='w-[25px]' />
       </button>
 
       <template #overlay>
@@ -105,7 +105,7 @@
 
           </a-menu-item>
 
-          <div :key='searchResult.length' class='max-h-[60vh] overflow-y-auto scrollbar-hide pt-1'>
+          <div :key='searchResult.length' class='h-[60vh] overflow-y-auto scrollbar-hide pt-1'>
             <a-menu-item
               v-for='member in searchResult'
               :key='member.id'
