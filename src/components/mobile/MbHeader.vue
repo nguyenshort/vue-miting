@@ -1,7 +1,7 @@
 <template>
   <div class='flex px-3 h-[50px] items-center'>
     <a href='/' @click.prevent='leaveRoom'>
-      <img class='h-[45px] w-auto' src='/images/logo.png' alt='' />
+      <img class='h-[40px] w-auto' src='/images/logo.svg' alt='' />
     </a>
 
     <div v-if='userStore.auth' class='ml-auto'>

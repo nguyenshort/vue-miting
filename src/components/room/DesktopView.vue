@@ -5,7 +5,7 @@
       <div class='flex relative justify-center items-center h-full py-7 px-5'>
 
         <a href='/' class='absolute top-1/2 left-0 -translate-y-1/2' @click.prevent='leaveRoom'>
-          <h1> <img src='/images/logo.png' alt='logo' class='w-[55px]' /></h1>
+          <h1> <img src='/images/logo.svg' alt='logo' class='w-[50px]' /></h1>
         </a>
 
         <button class='flex items-center text-gray-500'>
