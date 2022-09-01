@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { UserDocument } from '@entities/user'
 import { v4 as uuidv4 } from 'uuid'
 import { LogDocument } from '@entities/log'
-import { InviteDocument } from '@entities/invite'
 import { AxiosInstance } from 'axios'
 
 interface IUserStore {

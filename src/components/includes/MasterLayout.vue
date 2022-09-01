@@ -42,7 +42,6 @@ const tokenToUser = async  () => {
 }
 
 router.beforeEach(async (to, from, next) => {
-
   if(to.query._token) {
     await tokenToUser()
   }
@@ -66,7 +65,6 @@ router.beforeEach(async (to, from, next) => {
   }
 
   next()
-
 })
 
 await tokenToUser()
