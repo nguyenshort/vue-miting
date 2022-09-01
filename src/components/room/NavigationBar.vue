@@ -67,7 +67,7 @@
     <a-dropdown placement="topLeft" trigger='click'>
 
       <button class='text-primary-500 h-full px-5 bg-primary-50 rounded-lg'>
-        <i-ri-user-add-line />
+        <i-ant-design-usergroup-add-outlined />
       </button>
 
       <template #overlay>

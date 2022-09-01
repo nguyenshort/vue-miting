@@ -28,6 +28,7 @@ declare module '@vue/runtime-core' {
     DesktopView: typeof import('./../src/components/room/DesktopView.vue')['default']
     IAkarIconsSettingsHorizontal: typeof import('~icons/akar-icons/settings-horizontal')['default']
     IAkarIconsShareArrow: typeof import('~icons/akar-icons/share-arrow')['default']
+    IAntDesignUsergroupAddOutlined: typeof import('~icons/ant-design/usergroup-add-outlined')['default']
     IBiGrid3x3GapFill: typeof import('~icons/bi/grid3x3-gap-fill')['default']
     IBiLayoutSidebarInsetReverse: typeof import('~icons/bi/layout-sidebar-inset-reverse')['default']
     IBiMortarboard: typeof import('~icons/bi/mortarboard')['default']
