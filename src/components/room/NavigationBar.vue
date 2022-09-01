@@ -67,7 +67,7 @@
     <a-dropdown placement="topLeft" trigger='click'>
 
       <button class='text-primary-500 h-full px-5 bg-primary-50 rounded-lg'>
-        <img alt='' src='/images/communication_v2.png' class='w-[25px]' />
+        <i-ri-user-add-line />
       </button>
 
       <template #overlay>
