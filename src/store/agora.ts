@@ -5,6 +5,7 @@ import type { IAgoraRTCClient, IAgoraRTCRemoteUser, ILocalTrack } from 'agora-rt
 interface IRoomStore {
   _client?: IAgoraRTCClient
   users: UserDocument[],
+  isJoined: boolean,
   volumes: {
     id: number
     level: number
@@ -17,7 +18,8 @@ export const useAgoraStore = defineStore({
 
   state: (): IRoomStore => ({
     users: [],
-    volumes: []
+    volumes: [],
+    isJoined: false
   }),
 
   getters: {

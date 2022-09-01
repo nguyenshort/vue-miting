@@ -13,7 +13,40 @@ const useUser = useUserStore()
 const agoraStore = useAgoraStore()
 const router = useRouter()
 
+const route = useRoute()
+const axios = useAxios()
+// Init app
+// Rename from vueClientInit
+const tokenToUser = async  () => {
+
+  const params: any = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop: string) => searchParams.get(prop),
+  })
+
+  // Thay thế token bằng token trong query
+  if(params._token) {
+    cookies?.set('_token', params._token)
+  }
+
+  useUser.setToken(cookies?.get('_token'))
+  // kiểm tra cookie, lấy user
+
+  if (useUser._token) {
+    await useUser.getMe(axios)
+  }
+
+  if(!useUser.auth) {
+    useUser.logout()
+    cookies?.remove('_token')
+  }
+}
+
 router.beforeEach(async (to, from, next) => {
+
+  if(to.query._token) {
+    await tokenToUser()
+  }
+
   if(to.meta.private && !useUser.auth) {
     return next({
       name: 'index',
@@ -23,7 +56,7 @@ router.beforeEach(async (to, from, next) => {
     })
   }
 
-  if(to.name === 'room-id' && !agoraStore.client) {
+  if(to.name === 'room-id' && !agoraStore.isJoined) {
     return next({
       name: 'index',
       query: {
@@ -36,31 +69,9 @@ router.beforeEach(async (to, from, next) => {
 
 })
 
-const route = useRoute()
-// Init app
-const vueClientInit = async  () => {
+await tokenToUser()
 
-  const params: any = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop: string) => searchParams.get(prop),
-  })
-  if(params._token) {
-    cookies?.set('_token', params._token)
-  }
-
-  useUser.setToken(cookies?.get('_token'))
-  // kiểm tra cookie, lấy user
-
-  if (useUser._token) {
-    await useUser.getMe()
-  }
-
-  if(!useUser.auth) {
-    useUser.logout()
-    cookies?.remove('_token')
-  }
-}
-
-await vueClientInit()
+// await vueClientInit()
 
 const layouts = shallowRef<Record<string, ReturnType<typeof defineComponent>>>({})
 

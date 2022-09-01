@@ -52,7 +52,6 @@ const videoRef = ref<HTMLDivElement>()
 
 const chanel = ref('')
 const init = async (_chanel: string) => {
-
   if(!_chanel) {
     modalRef.value?.dispose()
     return
@@ -64,7 +63,6 @@ const init = async (_chanel: string) => {
   }
   await agoraStore.init(userStore.user as UserDocument)
   agoraStore.users[0].videoTrack?.play(videoRef.value!)
-
 }
 
 const loading = ref(false)
@@ -83,6 +81,7 @@ const join = async () => {
     modalRef.value?.dispose()
     loading.value = false
 
+    agoraStore.isJoined = true
     await userStore.writeLog(chanel.value, 'join')
 
     await router.push('/room/' + chanel.value)

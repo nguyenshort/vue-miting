@@ -3,6 +3,7 @@ import { UserDocument } from '@entities/user'
 import { v4 as uuidv4 } from 'uuid'
 import { LogDocument } from '@entities/log'
 import { InviteDocument } from '@entities/invite'
+import { AxiosInstance } from 'axios'
 
 interface IUserStore {
   user?: UserDocument
@@ -30,8 +31,7 @@ export const useUserStore = defineStore({
       this._token = token
     },
 
-    async getMe() {
-      const axios = useAxios()
+    async getMe(axios: AxiosInstance) {
       try {
         this.user = await axios.get('/smileeye/get-user')
       } catch (e) {
