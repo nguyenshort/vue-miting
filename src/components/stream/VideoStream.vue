@@ -74,7 +74,9 @@ const videoRef = ref<HTMLDivElement>()
 
 watch(() => props.user.videoTrack, (track: any) => {
   nextTick(() => {
-    track?.play(videoRef.value!)
+    track?.play(videoRef.value!, {
+      fit: 'contain'
+    })
   })
 })
 
