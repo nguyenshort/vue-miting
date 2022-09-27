@@ -26,6 +26,8 @@ declare module '@vue/runtime-core' {
     CurrentUserAvatar: typeof import('./../src/components/includes/CurrentUserAvatar.vue')['default']
     CurrrentUserAvatar: typeof import('./../src/components/includes/CurrrentUserAvatar.vue')['default']
     DesktopView: typeof import('./../src/components/room/DesktopView.vue')['default']
+    GridItem: typeof import('vue3-grid-layout')['GridItem']
+    GridLayout: typeof import('vue3-grid-layout')['GridLayout']
     IAkarIconsSettingsHorizontal: typeof import('~icons/akar-icons/settings-horizontal')['default']
     IAkarIconsShareArrow: typeof import('~icons/akar-icons/share-arrow')['default']
     IAntDesignUsergroupAddOutlined: typeof import('~icons/ant-design/usergroup-add-outlined')['default']

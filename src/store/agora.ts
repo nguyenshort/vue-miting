@@ -5,11 +5,7 @@ import type { IAgoraRTCClient, IAgoraRTCRemoteUser, ILocalTrack } from 'agora-rt
 interface IRoomStore {
   _client?: IAgoraRTCClient
   users: UserDocument[],
-  isJoined: boolean,
-  volumes: {
-    id: number
-    level: number
-  }[]
+  isJoined: boolean
 }
 
 // @ts-ignore
